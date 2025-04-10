@@ -1,131 +1,150 @@
-//create a menubar
+// Create a menubar
 let navbar = document.querySelector(".navlist");
-let color = document.querySelector("ul.navlist li a");
-let bodyId = document.querySelector("body").id;
 let menuIcon = document.querySelector(".menu-icon");
- 
- 
+
 console.log("hello");
-menuIcon.addEventListener("click",()=>{
-    menuIcon.classList.toggle("active");
-    navbar.classList.toggle("active");
-    document.body.classList.toggle("open")
-   })
-   //remove the navbar
-   navbar.addEventListener("click",()=>{
-    menuIcon.classList.remove("active");
-    navbar.classList.remove("active");
-    document.body.classList.remove("open")
-     })
-   
-  for(let Link in color){
-    if(Link.dataset.active == bodyId){
-        Link.classList.add("active");
-    }
-   }
-//rotate text code
-let text = document.querySelector(".text p");
-text.innerHTML = text.innerHTML.split("").map((char,i)=>{
-    `<b style = "transform:rotate(${i*4.3}deg")>${char}</b>`
 
-}).join("")
-
-const buttonClick = document.querySelector(".about-btn Button");
-const content = document.querySelector(".content");
-if(buttonClick){
-buttonClick.forEach((button,index)=>{
-    button.addEventListener("click",()=>{
-        console.log("hello");
-        content.forEach(contents => contents.style.display = "none");
-        console.log("hello1");
-        content[index].style.display = "block";
-        buttonClick.forEach(btn=>btn.classList.remove("active"));
-        console.log("hello2");
-        button.classList.add("active");
-    })
-})
-}
-var mixer = mixitup('.portfolio-gallery',{
-    selectors:{
-        target:'.portfolio-box'
-    },
-    animation:{
-        duration:500
-    }
+menuIcon.addEventListener("click", () => {
+  menuIcon.classList.toggle("active");
+  navbar.classList.toggle("active");
+  document.body.classList.toggle("open");
 });
-//skill progress bar
-const first_skill = document.querySelector(".skill:first-child");
-const sk_counter = document.querySelector(".counter span");
-const progress_bars = document.querySelector(".skills svg circle");
-window.addEventListener("scroll",()=>{
-    if(skillPlayed){
-    skillsCounter();
-}})
-function hasReached(el){
-    let topPosition = el.getBoundingClientRect().top;
-    if(window.innerHeight>=topPosition+el.offsetHeight){
-        return true;
 
-    }else{
-        return false;
-    }
+// Remove the navbar when clicking on it
+navbar.addEventListener("click", () => {
+  menuIcon.classList.remove("active");
+  navbar.classList.remove("active");
+  document.body.classList.remove("open");
+});
+
+// Highlight active nav link
+let menuLi = document.querySelectorAll("nav ul li a");
+let section = document.querySelectorAll("section");
+
+function activeMenu() {
+  let len = section.length;
+  while (--len && window.scrollY + 97 < section[len].offsetTop) {}
+  menuLi.forEach(sec => sec.classList.remove("active"));
+  if (menuLi[len]) menuLi[len].classList.add("active");
 }
-//console.log(typeof progress_bars);
-function updateCount(num,Maxnum){
-    let currentNum = +num.innerHTML;
-    if(currentNum<Maxnum){
-        num.innerHTML = currentNum+1;
-        setTimeout(()=>{
-            updateCount(num,Maxnum);
-        },12)
-    }
+activeMenu();
+window.addEventListener("scroll", activeMenu);
+
+// Rotate text code
+let text = document.querySelector(".text p");
+if (text) {
+  text.innerHTML = text.innerHTML
+    .split("")
+    .map((char, i) => `<b style="transform:rotate(${i * 4.3}deg)">${char}</b>`)
+    .join("");
 }
+
+// About button switch logic
+const buttonClick = document.querySelectorAll(".about-btn button");
+const content = document.querySelectorAll(".content");
+
+if (buttonClick.length) {
+  buttonClick.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      content.forEach(contents => (contents.style.display = "none"));
+      content[index].style.display = "block";
+      buttonClick.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+    });
+  });
+}
+
+// Mixitup for portfolio
+var mixer = mixitup(".portfolio-gallery", {
+  selectors: {
+    target: ".portfolio-box",
+  },
+  animation: {
+    duration: 500,
+  },
+});
+
+
+// Skills progress bar
+let first_skill = document.querySelector(".skill:first-child");
+let sk_counter = document.querySelectorAll(".counter span");
+let progress_bars = document.querySelectorAll(".skills svg circle");
 let skillPlayed = false;
 
-function skillsCounter(){
-    if(!hasReached(first_skill))return;
-    skillPlayed=true;
-    sk_counter.forEach((counter,i)=>{
-let target = counter.dataset.target;
-let strokeValue= 465-465*(target/100);
-progress_bars[i].style.setProperty("--target",strokeValue);
-setTimeout(()=>{
-    updateCount(counter,target);
-},400)
-    })
-    progress_bars.forEach(p=>p.style.animation = "progress 2s ease-in-out forwards");
+function hasReached(el) {
+  let topPosition = el.getBoundingClientRect().top;
+  return window.innerHeight >= topPosition + el.offsetHeight;
 }
-let calcScrollValue = ()=>{
-    let scrollProgress = document.getElementById("progress");
-    let pos = document.documentElement.scrollTop;
-    console.log("hello");
-    let calcHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    let scrollValue = Math.round((pos*100)/calcHeight);
-    console.log(scrollValue)
-    if(pos > 100){
-        scrollProgress.style.display = "grid";
-        //console.log("how");
-    }
-    else{
-        console.log("how");
-        scrollProgress.style.display = "none";
-    }
-    scrollProgress.addEventListener("click",()=>{
-        document.documentElement.scrollTop = 0;
-    })
-    scrollProgress.style.background = "conic-gradient(#fff ${scrollValue}%,#e6006d ${scrollValue}%)";
 
+function updateCount(num, Maxnum) {
+  let currentNum = +num.innerHTML;
+  if (currentNum < Maxnum) {
+    num.innerHTML = currentNum + 1;
+    setTimeout(() => updateCount(num, Maxnum), 12);
+  }
+}
+
+function skillsCounter() {
+  if (!hasReached(first_skill) || skillPlayed) return;
+  skillPlayed = true;
+
+  sk_counter.forEach((counter, i) => {
+    let target = +counter.dataset.target;
+    let strokeValue = 465 - 465 * (target / 100);
+    progress_bars[i].style.setProperty("--target", strokeValue);
+    setTimeout(() => updateCount(counter, target), 400);
+  });
+
+  progress_bars.forEach(p => (p.style.animation = "progress 2s ease-in-out forwards"));
+}
+
+window.addEventListener("scroll", () => {
+  if (skillPlayed) return;
+  skillsCounter();
+});
+
+// Contact form submission (Web3Forms)
+document.getElementById("contact-form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const data = new FormData(form);
+
+  const response = await fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    body: data,
+  });
+
+  if (response.ok) {
+    document.getElementById("popup").style.display = "block";
+    form.reset();
+    setTimeout(() => {
+      document.getElementById("popup").style.display = "none";
+    }, 5000);
+  } else {
+    alert("❌ Something went wrong. Please try again.");
+  }
+});
+
+// Scroll progress bar
+let calcScrollValue = () => {
+  let scrollProgress = document.getElementById("progress");
+  let pos = document.documentElement.scrollTop;
+  let calcHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  let scrollValue = Math.round((pos * 100) / calcHeight);
+
+  if (pos > 100) {
+    scrollProgress.style.display = "grid";
+  } else {
+    scrollProgress.style.display = "none";
+  }
+
+  scrollProgress.addEventListener("click", () => {
+    document.documentElement.scrollTop = 0;
+  });
+
+  scrollProgress.style.background = `conic-gradient(#fff ${scrollValue}%, #e6006d ${scrollValue}%)`;
 };
+
 window.onscroll = calcScrollValue;
 window.onload = calcScrollValue;
-let menuLi = document.querySelector("nav ul li a");
-let section = document.querySelector("section");
-function activeMenu(){
-    let len = section.clientHeight;
-    while(--len && window.scrollY +97 < section[len].offsetTop){}
-        menuLi.forEach(sec => sec.classList.remove("active"));
-        menuLi[len].classList.add("active");
-    
-}
-activeMenu()
-window.addEventListener("scroll",activeMenu);

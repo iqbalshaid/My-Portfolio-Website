@@ -125,7 +125,15 @@ nav .right-nav{
 .menu-icon.active .bar{
     opacity: 0px;
 }
+.menu-icon.active ul.navlist li a.active{
+    background: var(--gradient-clor-bg);
+    -webkit-background-clip: text;
+    color: transparent;
+
+}
+
 /*Home section design are start here*/
+
 section{
     padding: 90px 0px;
 }
@@ -307,6 +315,17 @@ section{
     animation-delay: 2s;
 
 }
+#popup {
+    display: none;
+    background-color: #e7f9f0;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #c3e6cb;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
 .about .about-content h3{
     font-size: 1.3rem;
     font-weight: 500;
@@ -324,12 +343,13 @@ section{
     align-items: center;
     justify-content: flex-start;
     gap:30px;
-    padding: 30px;
+    padding: 30px 30px;
+    
 }
 .about .about-img img{
     width: 400px;
     top:37px;
-    height: 460px;
+    height: 660px;
     align-items: center;
     box-shadow: var(--hover-box-shadow);
     margin-left:4rem;
@@ -344,8 +364,10 @@ section{
     box-shadow: var(--hover-box-shadow);
     transition: all 0.4s ease;
     font-weight: 500;
+    cursor: pointer;
 
 }
+
 .about-btn button.active{
     background: var(--gradient-clor-bg);
     color: #fff;
@@ -518,6 +540,7 @@ margin-top:6rem;
     height: 160px;
     transition: .1s;
 }
+
 .portfolio-box{
     display: flex;
     justify-content: space-between;
@@ -534,6 +557,7 @@ margin-top:6rem;
     
     padding-bottom: .5rem;
 }
+
 .portfolio-content h3{
     font-size: 1.2rem;
     font-weight: 600;
@@ -558,6 +582,7 @@ margin-top:6rem;
 .portfolio-box:hover img{
     transform: scale(1.1);
 }
+
 .portfolio-content a.readMore{
     
     background: var(--gradient-white-bg2);
@@ -880,6 +905,11 @@ footer p{
             
         grid-template-columns: repeat(auto-fill,minmax(350px,1fr));
 
+    }
+    .portfolio-box{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     footer p{
         font-size: 1.5rem;
